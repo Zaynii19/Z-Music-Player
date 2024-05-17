@@ -5,6 +5,228 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".SongActivity">
 
+    <!-- Vertical guidelines for layout structure -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_begin="16dp"
+        android:orientation="vertical" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_end="16dp"
+        android:orientation="vertical" />
+
+    <!-- Horizontal guideline for layout structure -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_begin="16dp"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/back"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/backnavigation"
+            android:scaleType="fitStart"
+            app:srcCompat="@drawable/left_back" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:text="@string/word_of_music"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/favBtn"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:contentDescription="@string/favourite"
+            android:scaleType="fitEnd"
+            app:srcCompat="@drawable/fav"
+            app:tint="#E91E63" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/songPic"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintDimensionRatio="4:5"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/songName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/song_name"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/songPic"
+        app:layout_constraintStart_toStartOf="@+id/songPic"
+        app:layout_constraintTop_toBottomOf="@+id/songPic" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/songName">
+
+        <TextView
+            android:id="@+id/songStartLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/_00_00" />
+
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:progressDrawable="@color/cool_pink"
+            android:thumb="@color/cool_green" />
+
+        <TextView
+            android:id="@+id/songTotalLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/_00_00" />
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/leftSongBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#43DFA8"
+        android:contentDescription="@string/left"
+        app:cornerRadius="300dp"
+        app:icon="@drawable/left_back"
+        app:iconSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/pauseSong"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/pauseSong"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#E91E63"
+        android:contentDescription="@string/paush"
+        app:cornerRadius="300dp"
+        app:icon="@drawable/pause"
+        app:iconSize="30dp"
+        app:iconTint="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/rightSong"
+        app:layout_constraintStart_toEndOf="@+id/leftSongBtn"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/rightSong"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#43DFA8"
+        android:contentDescription="@string/right"
+        app:cornerRadius="300dp"
+        app:icon="@drawable/right_back"
+        app:iconSize="20dp"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toEndOf="@+id/pauseSong"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start">
+
+        <ImageButton
+            android:id="@+id/repeatBtn"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/replay"
+            app:tint="#E91E63" />
+
+        <ImageButton
+            android:id="@+id/equalizerBtn"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/equalizer"
+            app:tint="#E91E63" />
+
+        <ImageButton
+            android:id="@+id/timerBtn"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/timer"
+            app:tint="#E91E63" />
+
+        <ImageButton
+            android:id="@+id/shareBtn"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/share"
+            app:tint="#E91E63" />
+
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

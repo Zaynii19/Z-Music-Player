@@ -3,4 +3,12 @@
     <string name="shuffle">Shuffle</string>
     <string name="favourite">Favourite</string>
     <string name="playlist">PlayList</string>
+    <string name="word_of_music">Word of Music</string>
+    <string name="backnavigation">backNavigation</string>
+    <string name="textview">TextView</string>
+    <string name="paush">paush</string>
+    <string name="left">left</string>
+    <string name="right">right</string>
+    <string name="song_name">Song Name</string>
+    <string name="_00_00">00:00</string>
 </resources>
