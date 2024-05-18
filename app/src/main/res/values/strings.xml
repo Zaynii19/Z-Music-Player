@@ -11,4 +11,5 @@
     <string name="right">right</string>
     <string name="song_name">Song Name</string>
     <string name="_00_00">00:00</string>
+    <string name="playlists">PlayLists</string>
 </resources>
