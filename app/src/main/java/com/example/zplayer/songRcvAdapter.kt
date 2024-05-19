@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zplayer.databinding.SongViewItemBinding
 
-class songRcvAdapter(private val context:Context, private val musicList: ArrayList<String>):RecyclerView.Adapter<songRcvAdapter.MyViewHolder>() {
+class songRcvAdapter(private val context:Context, private val musicList: MutableList<SongsLists>):RecyclerView.Adapter<songRcvAdapter.MyViewHolder>() {
     class MyViewHolder(binding:SongViewItemBinding):RecyclerView.ViewHolder(binding.root) {
         val title = binding.songTitle
         val album = binding.songAlbum
@@ -23,6 +23,9 @@ class songRcvAdapter(private val context:Context, private val musicList: ArrayLi
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.title.text = musicList[position]
+        holder.title.text = musicList[position].title
+        holder.album.text = musicList[position].album
+        holder.duration.text = musicList[position].formattedDuration
+
     }
 }
