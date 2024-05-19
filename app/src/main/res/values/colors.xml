@@ -15,5 +15,7 @@
     <color name="purple_780">#8E24AA</color>
     <color name="teal_280">#6AB6B5</color>
     <color name="teal_200">#80CBC4</color>
+    <color name="scrollbar_thumb_color">#3E3D3D</color>
+    <color name="scrollbar_track_color">#747C74</color>
 
 </resources>

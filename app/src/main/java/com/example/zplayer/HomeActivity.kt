@@ -10,7 +10,6 @@ import android.provider.MediaStore
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -30,9 +29,9 @@ class HomeActivity : AppCompatActivity() {
     private val REQUEST_CODE_READ_MEDIA_AUDIO = 19
     private val REQUEST_CODE_READ_EXTERNAL_STORAGE = 20
 
-    private lateinit var songAdapter: songRcvAdapter
+    private lateinit var songAdapter: SongRcvAdapter
 
-    //static single object of class can be accessed by any class
+    // Static single object of class can be accessed by any class
     companion object {
         lateinit var songListMA: MutableList<SongsLists>
     }
@@ -49,7 +48,9 @@ class HomeActivity : AppCompatActivity() {
             insets
         }
 
-        //Define toggle
+        songListMA = mutableListOf()
+
+        // Define toggle
         toggle = ActionBarDrawerToggle(this, binding.main, binding.toolbar, R.string.open, R.string.close)
         binding.main.addDrawerListener(toggle)
         toggle.syncState()
@@ -66,10 +67,13 @@ class HomeActivity : AppCompatActivity() {
         }
 
         binding.shuffleBtn.setOnClickListener {
-            startActivity(Intent(this, SongActivity::class.java))
+            intent = Intent(this, SongActivity::class.java)
+            intent.putExtra("index", 0)
+            intent.putExtra("class", "MainActivity")
+            startActivity(intent)
         }
 
-        //navigation items functionality
+        // Navigation items functionality
         binding.navBar.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
@@ -99,7 +103,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    //after reading storage store songs to list
+    // After reading storage store songs to list
     private fun initializeSongList() {
         if (hasReadMediaAudioPermission() || hasReadExternalStoragePermission()) {
             songListMA = getAllSongs()
@@ -111,12 +115,12 @@ class HomeActivity : AppCompatActivity() {
         binding.rcv.setHasFixedSize(true)
         binding.rcv.setItemViewCacheSize(13)
         binding.rcv.layoutManager = LinearLayoutManager(this)
-        songAdapter = songRcvAdapter(this, songListMA)
+        songAdapter = SongRcvAdapter(this, songListMA)
         binding.rcv.adapter = songAdapter
 
         binding.totalSongs.text = buildString {
-        append("Total Songs: ")
-        append(songAdapter.itemCount)
+            append("Total Songs: ")
+            append(songAdapter.itemCount)
         }
     }
 
@@ -136,7 +140,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    //read storage and retrieve songs data
+    // Read storage and retrieve songs data
     @SuppressLint("Recycle")
     private fun getAllSongs(): MutableList<SongsLists> {
         val audioFiles = mutableListOf<SongsLists>()
@@ -148,7 +152,7 @@ class HomeActivity : AppCompatActivity() {
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.DATE_ADDED,
-            MediaStore.Audio.Media.DATA ,
+            MediaStore.Audio.Media.DATA,
             MediaStore.Audio.Media.ALBUM_ID
         )
         val cursor = contentResolver.query(
@@ -167,7 +171,7 @@ class HomeActivity : AppCompatActivity() {
                     val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
                     val duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
                     val path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
-                    //get song picture
+                    // Get song picture
                     val albumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)).toString()
                     val uri = Uri.parse("content://media/external/audio/albumart")
                     val artUri = Uri.withAppendedPath(uri, albumId).toString()
@@ -183,8 +187,7 @@ class HomeActivity : AppCompatActivity() {
         return audioFiles
     }
 
-
-    //navigation items selection
+    // Navigation items selection
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (toggle.onOptionsItemSelected(item))
             return true
@@ -198,13 +201,9 @@ class HomeActivity : AppCompatActivity() {
         return String.format("%02d:%02d", minutes, seconds)
     }
 
-
     private fun hasReadMediaAudioPermission() =
         ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED
 
     private fun hasReadExternalStoragePermission() =
         ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
 }
-
-
-

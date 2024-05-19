@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.Request
 import com.bumptech.glide.request.RequestOptions
 import com.example.zplayer.databinding.SongViewItemBinding
 
-class songRcvAdapter(private val context:Context, private val musicList: MutableList<SongsLists>):RecyclerView.Adapter<songRcvAdapter.MyViewHolder>() {
-    class MyViewHolder(binding:SongViewItemBinding):RecyclerView.ViewHolder(binding.root) {
+class SongRcvAdapter(private val context: Context, private val musicList: MutableList<SongsLists>) :
+    RecyclerView.Adapter<SongRcvAdapter.MyViewHolder>() {
+
+    class MyViewHolder(binding: SongViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.songTitle
         val album = binding.songAlbum
         val duration = binding.songDuration
@@ -32,15 +33,17 @@ class songRcvAdapter(private val context:Context, private val musicList: Mutable
         holder.title.text = musicList[position].title
         holder.album.text = musicList[position].album
         holder.duration.text = musicList[position].formattedDuration
-        //set song album image using glide
+        // Set song album image using Glide
         Glide.with(context)
             .load(musicList[position].artUri)
-            .apply(RequestOptions().placeholder(R.drawable.music_player))  //if error in loading song album pic or have no pic
+            .apply(RequestOptions().placeholder(R.drawable.music_player))  // Placeholder image
             .into(holder.img)
 
         holder.root.setOnClickListener {
-            ContextCompat.startActivity(context, Intent(context, SongActivity::class.java), null)
+            val intent = Intent(context, SongActivity::class.java)
+            intent.putExtra("index", position)
+            intent.putExtra("class", "SongRcvAdapter")
+            ContextCompat.startActivity(context, intent, null)
         }
-
     }
 }
