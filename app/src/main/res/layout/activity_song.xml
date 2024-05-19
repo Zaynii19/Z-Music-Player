@@ -48,6 +48,7 @@
             android:layout_weight="1"
             android:contentDescription="@string/backnavigation"
             android:scaleType="fitStart"
+            android:padding="15dp"
             app:srcCompat="@drawable/left_back" />
 
         <TextView

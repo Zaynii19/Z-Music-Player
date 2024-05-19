@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -13,7 +14,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.zplayer.databinding.ActivityHomeBinding
+import java.util.ArrayList
 import kotlin.system.exitProcess
 
 class HomeActivity : AppCompatActivity() {
@@ -22,8 +25,14 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private lateinit var toggle: ActionBarDrawerToggle
+
+    //initializing share preferences to store permissions settings
     private val PREFS_NAME = "prefs"
     private val KEY_PERMISSION_REQUESTED = "permission_requested"
+
+    private lateinit var songAdapter: songRcvAdapter
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +50,6 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        // Setting up the toolbar
-        //setSupportActionBar(binding.toolbar)
 
         // Defining toggle
         toggle = ActionBarDrawerToggle(this, binding.main, binding.toolbar, R.string.open, R.string.close)
@@ -75,6 +81,26 @@ class HomeActivity : AppCompatActivity() {
             }
             true
         }
+
+        //temp list of songs
+        val songList = ArrayList<String>()
+        songList.add("Tera Bina")
+        songList.add("Jena Marna")
+        songList.add("Bewafa Bewafa")
+        songList.add("Hamari Adhuri khani")
+
+        //Defining recycler view
+        binding.rcv.setHasFixedSize(true)  //create or load songs of layout size not more (efficient memory use)
+        binding.rcv.setItemViewCacheSize(13)  //13 songs at a time
+        binding.rcv.layoutManager = LinearLayoutManager(this, )
+        songAdapter = songRcvAdapter(this, songList)
+        binding.rcv.adapter = songAdapter
+
+        binding.totalSongs.text = buildString {
+            append("Total Songs: ")
+            append(songAdapter.itemCount)
+        }
+
     }
 
     // For retrieving storage songs

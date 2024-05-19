@@ -27,6 +27,7 @@
             android:layout_weight="1"
             android:contentDescription="@string/backnavigation"
             android:layout_marginStart="20dp"
+            android:padding="15dp"
             android:scaleType="fitStart"
             app:srcCompat="@drawable/left_back"
             app:tint="@color/white" />
