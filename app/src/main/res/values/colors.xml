@@ -8,4 +8,12 @@
     <color name="cool_green">#64DD17</color>
     <color name="cool_pink">#F50057</color>
     <color name="yellow">#FFD600</color>
+    <color name="purple_588">#580078</color>
+    <color name="teal_288">#007858</color>
+    <color name="teal_788">#78C8BC</color>
+    <color name="purple_280">#8E24AA</color>
+    <color name="purple_780">#8E24AA</color>
+    <color name="teal_280">#6AB6B5</color>
+    <color name="teal_200">#80CBC4</color>
+
 </resources>

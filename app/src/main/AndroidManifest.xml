@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
     <application
@@ -36,6 +37,7 @@
         </activity>
         <activity
             android:name=".HomeActivity"
+            android:theme="@style/coolPinkNav"
             android:exported="true" />
 
         <meta-data
