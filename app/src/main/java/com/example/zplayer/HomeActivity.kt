@@ -3,6 +3,7 @@ package com.example.zplayer
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -147,7 +148,8 @@ class HomeActivity : AppCompatActivity() {
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.DURATION,
             MediaStore.Audio.Media.DATE_ADDED,
-            MediaStore.Audio.Media.DATA
+            MediaStore.Audio.Media.DATA ,
+            MediaStore.Audio.Media.ALBUM_ID
         )
         val cursor = contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
@@ -165,10 +167,14 @@ class HomeActivity : AppCompatActivity() {
                     val artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
                     val duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
                     val path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
+                    //get song picture
+                    val albumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)).toString()
+                    val uri = Uri.parse("content://media/external/audio/albumart")
+                    val artUri = Uri.withAppendedPath(uri, albumId).toString()
 
                     if (id != null && path != null) {
                         val formattedDuration = formatSongDuration(duration)
-                        audioFiles.add(SongsLists(id, title, album, artist, path, formattedDuration))
+                        audioFiles.add(SongsLists(id, title, album, artist, path, formattedDuration, artUri))
                     }
                 } while (cursor.moveToNext())
                 cursor.close()

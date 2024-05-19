@@ -1,9 +1,14 @@
 package com.example.zplayer
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.Request
+import com.bumptech.glide.request.RequestOptions
 import com.example.zplayer.databinding.SongViewItemBinding
 
 class songRcvAdapter(private val context:Context, private val musicList: MutableList<SongsLists>):RecyclerView.Adapter<songRcvAdapter.MyViewHolder>() {
@@ -12,6 +17,7 @@ class songRcvAdapter(private val context:Context, private val musicList: Mutable
         val album = binding.songAlbum
         val duration = binding.songDuration
         val img = binding.songImg
+        val root = binding.root
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -26,6 +32,15 @@ class songRcvAdapter(private val context:Context, private val musicList: Mutable
         holder.title.text = musicList[position].title
         holder.album.text = musicList[position].album
         holder.duration.text = musicList[position].formattedDuration
+        //set song album image using glide
+        Glide.with(context)
+            .load(musicList[position].artUri)
+            .apply(RequestOptions().placeholder(R.drawable.music_player))  //if error in loading song album pic or have no pic
+            .into(holder.img)
+
+        holder.root.setOnClickListener {
+            ContextCompat.startActivity(context, Intent(context, SongActivity::class.java), null)
+        }
 
     }
 }

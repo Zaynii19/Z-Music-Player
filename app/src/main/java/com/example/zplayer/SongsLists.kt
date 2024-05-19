@@ -7,5 +7,6 @@ data class SongsLists(
     val album: String,
     val artist: String,
     val path: String,
-    val formattedDuration: String
+    val formattedDuration: String,
+    val artUri:String
 )
