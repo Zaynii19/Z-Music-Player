@@ -65,7 +65,7 @@
                 android:layout_weight="1"
                 android:contentDescription="@string/playlist"
                 android:scaleType="fitCenter"
-                app:srcCompat="@drawable/music_album"
+                app:srcCompat="@drawable/playlist"
                 app:tint="#E91E63" />
 
         </LinearLayout>

@@ -52,5 +52,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    //Picture placeholder
     implementation (libs.glide)
+    //Notification media in android
+    implementation(libs.androidx.media)
 }

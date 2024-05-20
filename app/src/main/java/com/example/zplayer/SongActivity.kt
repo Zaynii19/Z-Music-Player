@@ -1,5 +1,6 @@
 package com.example.zplayer
 
+import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
@@ -15,22 +16,21 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.zplayer.databinding.ActivitySongBinding
 
 class SongActivity : AppCompatActivity(), ServiceConnection { //add service connection to activity and implement members
-    private val binding by lazy {
-        ActivitySongBinding.inflate(layoutInflater)
-    }
-
     companion object {
         lateinit var songListSA: MutableList<SongsLists>
         var songIndex:Int = 0
         //var mediaPlayer:MediaPlayer? = null   //use when no service created
         var isPlaying:Boolean = false
         var musicService : MusicService? = null
+        @SuppressLint("StaticFieldLeak")
+        lateinit var binding: ActivitySongBinding
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         //Setting Theme
         setTheme(R.style.coolPink)
+
+        binding = ActivitySongBinding.inflate(layoutInflater)
 
         //set binding
         setContentView(binding.root)
@@ -98,6 +98,7 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
             musicService!!.mediaPlayer!!.start()
             isPlaying = true
             binding.pauseSong.setIconResource(R.drawable.pause)
+            musicService!!.showNotification(R.drawable.noti_pause)
         }catch (e:Exception){
             return
         }
@@ -123,11 +124,13 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
 
     private fun playMusic(){
         binding.pauseSong.setIconResource(R.drawable.pause)
+        musicService!!.showNotification(R.drawable.noti_pause)
         musicService!!.mediaPlayer!!.start()
         isPlaying = true
     }
     private fun pauseMusic(){
         binding.pauseSong.setIconResource(R.drawable.play)
+        musicService!!.showNotification(R.drawable.noti_play)
         musicService!!.mediaPlayer!!.pause()
         isPlaying = false
     }
@@ -145,21 +148,6 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
         }
     }
 
-    private fun setSongPosition(next: Boolean){
-        if (next){
-            if (songListSA.size - 1 == songIndex){
-                songIndex = 0
-            }else{
-                ++songIndex
-            }
-        }else{
-            if (songIndex == 0){
-                songIndex = songListSA.size - 1
-            }else{
-                --songIndex
-            }
-        }
-    }
 
     //Service connection methods
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
