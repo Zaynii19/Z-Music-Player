@@ -1,5 +1,6 @@
 package com.example.zplayer
 
+import android.annotation.SuppressLint
 import android.media.MediaMetadataRetriever
 
 //Data class for songs
@@ -21,17 +22,26 @@ fun getImageArt(path: String): ByteArray? {
 }
 
 fun setSongPosition(next: Boolean){
-    if (next){
-        if (SongActivity.songListSA.size - 1 == SongActivity.songIndex){
-            SongActivity.songIndex = 0
+    if (!SongActivity.repeat){
+        if (next){
+            if (SongActivity.songListSA.size - 1 == SongActivity.songIndex){
+                SongActivity.songIndex = 0
+            }else{
+                ++SongActivity.songIndex
+            }
         }else{
-            ++SongActivity.songIndex
-        }
-    }else{
-        if (SongActivity.songIndex == 0){
-            SongActivity.songIndex = SongActivity.songListSA.size - 1
-        }else{
-            --SongActivity.songIndex
+            if (SongActivity.songIndex == 0){
+                SongActivity.songIndex = SongActivity.songListSA.size - 1
+            }else{
+                --SongActivity.songIndex
+            }
         }
     }
+}
+
+@SuppressLint("DefaultLocale")
+fun formatSongDuration(duration: Long): String {
+    val minutes = (duration / 1000 / 60).toInt()
+    val seconds = (duration / 1000 % 60).toInt()
+    return String.format("%02d:%02d", minutes, seconds)
 }

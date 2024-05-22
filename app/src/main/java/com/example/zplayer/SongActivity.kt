@@ -4,18 +4,22 @@ import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.SeekBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.zplayer.databinding.ActivitySongBinding
-
-class SongActivity : AppCompatActivity(), ServiceConnection { //add service connection to activity and implement members
+//ServiceConnection add service connection to activity and implement members
+//MediaPlayer.OnCompletionListener restart next song when song is complete
+class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener{
     companion object {
         lateinit var songListSA: MutableList<SongsLists>
         var songIndex:Int = 0
@@ -24,6 +28,7 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
         var musicService : MusicService? = null
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivitySongBinding
+        var repeat : Boolean = false
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +55,8 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
         songListSA = mutableListOf()
 
         binding.back.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
+            //startActivity(Intent(this, HomeActivity::class.java))
+            finish()
         }
 
         initializeLayout()
@@ -72,6 +78,20 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
             preNextSong(false)
         }
 
+        binding.seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser){
+                    musicService!!.mediaPlayer!!.seekTo(progress)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+
+
+        })
+
     }
 
     //Update UI for each song
@@ -84,6 +104,9 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
 
         binding.songName.text = songListSA[songIndex].title
         binding.songTotalLength.text = songListSA[songIndex].formattedDuration
+        if (repeat){
+            binding.repeatBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
+        }
     }
 
     //play song
@@ -99,6 +122,25 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
             isPlaying = true
             binding.pauseSong.setIconResource(R.drawable.pause)
             musicService!!.showNotification(R.drawable.noti_pause)
+
+            //set seekbar, current song duration, total song duration
+            binding.songTotalLength.text = songListSA[songIndex].formattedDuration
+            binding.songStartLength.text = formatSongDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
+            binding.seekbar.progress = 0
+            binding.seekbar.max = musicService!!.mediaPlayer!!.duration
+            musicService!!.mediaPlayer!!.setOnCompletionListener (this)
+
+            //below buttons
+            binding.repeatBtn.setOnClickListener {
+                if (!repeat){
+                    repeat = true
+                    binding.repeatBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
+                }else{
+                    repeat = false
+                    binding.repeatBtn.setColorFilter(ContextCompat.getColor(this, R.color.AppRedButtons))
+                }
+            }
+
         }catch (e:Exception){
             return
         }
@@ -154,9 +196,21 @@ class SongActivity : AppCompatActivity(), ServiceConnection { //add service conn
         val binder = service as MusicService.MyBinder
         musicService = binder.currentService()
         createMediaPlayer()
+        musicService!! .seekbarSetup()
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {
         musicService = null
+    }
+
+    //restart next song when song is complete
+    override fun onCompletion(mp: MediaPlayer?) {
+        setSongPosition(true)
+        createMediaPlayer()
+        try {
+            setLayout()
+        }catch (e:Exception){
+            return
+        }
     }
 }

@@ -22,6 +22,7 @@ class BroadcastNotiReceiver : BroadcastReceiver(){
 
             ApplicationClass.EXIT -> {
                 SongActivity.musicService!!.stopForeground(true)
+                SongActivity.musicService!!.mediaPlayer!!.release()
                 SongActivity.musicService = null
                 exitProcess(1)
             }

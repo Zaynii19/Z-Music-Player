@@ -27,7 +27,8 @@ class PlaylistActivity : AppCompatActivity() {
         }
 
         binding.back.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
+            //startActivity(Intent(this, HomeActivity::class.java))
+            finish()
         }
     }
 }

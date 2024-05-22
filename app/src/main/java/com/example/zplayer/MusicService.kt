@@ -1,5 +1,6 @@
 package com.example.zplayer
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
@@ -7,7 +8,9 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 
@@ -15,6 +18,7 @@ class MusicService : Service(){
     private var myBinder = MyBinder()
     var mediaPlayer :MediaPlayer? = null
     private lateinit var mediaSession: MediaSessionCompat
+    private lateinit var runnable: Runnable
 
     override fun onBind(intent: Intent?): IBinder {
         mediaSession = MediaSessionCompat(baseContext, "My Music")
@@ -41,7 +45,6 @@ class MusicService : Service(){
         val exitIntent = Intent(baseContext, BroadcastNotiReceiver::class.java).setAction(ApplicationClass.EXIT)
         val exitPendingIntent = PendingIntent.getBroadcast(baseContext, 0, exitIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        //get bytecode of image from list and convert to image of current song
         val imageArt = getImageArt(SongActivity.songListSA[SongActivity.songIndex].path)
         val currentSongImage = if (imageArt != null){
             BitmapFactory.decodeByteArray(imageArt, 0, imageArt.size)
@@ -79,8 +82,25 @@ class MusicService : Service(){
             SongActivity.musicService!!.mediaPlayer!!.prepare()
             SongActivity.binding.pauseSong.setIconResource(R.drawable.pause)
             SongActivity.musicService!!.showNotification(R.drawable.noti_pause)
+            SongActivity.binding.seekbar.progress = 0
+            SongActivity.binding.seekbar.max = mediaPlayer!!.duration
+            SongActivity.binding.songTotalLength.text = SongActivity.songListSA[SongActivity.songIndex].formattedDuration
+            SongActivity.binding.songStartLength.text = formatSongDuration(mediaPlayer!!.currentPosition.toLong())
+
         }catch (e:Exception){
             return
         }
     }
+
+    //change the song start duration and seekbar with time
+    fun seekbarSetup(){
+        runnable = Runnable {
+            SongActivity.binding.songStartLength.text = formatSongDuration(mediaPlayer!!.currentPosition.toLong())
+            SongActivity.binding.seekbar.progress = mediaPlayer!!.currentPosition
+            Handler(Looper.getMainLooper()).postDelayed(runnable, 200)
+        }
+        //Ensure the start of inner handler
+        Handler(Looper.getMainLooper()).postDelayed(runnable, 0)
+    }
+
 }

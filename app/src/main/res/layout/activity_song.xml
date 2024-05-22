@@ -121,13 +121,15 @@
         <SeekBar
             android:id="@+id/seekbar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="10dp"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:progressDrawable="@color/cool_pink"
-            android:thumb="@color/cool_green" />
+            android:progressDrawable="@drawable/seekbar_progress"
+            android:thumb="@drawable/custom_thumb"
+            android:thumbTint="@color/black" />
+
 
         <TextView
             android:id="@+id/songTotalLength"
@@ -156,7 +158,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#E91E63"
+        android:backgroundTint="@color/AppRedButtons"
         android:contentDescription="@string/paush"
         app:cornerRadius="300dp"
         app:icon="@drawable/pause"
@@ -198,7 +200,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/replay"
-            app:tint="#E91E63" />
+            app:tint="@color/AppRedButtons" />
 
         <ImageButton
             android:id="@+id/equalizerBtn"
@@ -208,7 +210,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/equalizer"
-            app:tint="#E91E63" />
+            app:tint="@color/AppRedButtons" />
 
         <ImageButton
             android:id="@+id/timerBtn"
@@ -218,7 +220,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/timer"
-            app:tint="#E91E63" />
+            app:tint="@color/AppRedButtons" />
 
         <ImageButton
             android:id="@+id/shareBtn"
@@ -228,7 +230,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/share"
-            app:tint="#E91E63" />
+            app:tint="@color/AppRedButtons" />
 
     </LinearLayout>
 

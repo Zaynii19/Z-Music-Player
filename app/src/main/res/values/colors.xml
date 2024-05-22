@@ -17,5 +17,6 @@
     <color name="teal_200">#80CBC4</color>
     <color name="scrollbar_thumb_color">#3E3D3D</color>
     <color name="scrollbar_track_color">#747C74</color>
+    <color name="AppRedButtons">#E91E63</color>
 
 </resources>

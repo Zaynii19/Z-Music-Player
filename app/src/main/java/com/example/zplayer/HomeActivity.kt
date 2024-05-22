@@ -3,20 +3,24 @@ package com.example.zplayer
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.CalendarContract.Colors
 import android.provider.MediaStore
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.zplayer.databinding.ActivityHomeBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.system.exitProcess
 
 class HomeActivity : AppCompatActivity() {
@@ -78,7 +82,29 @@ class HomeActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
                 R.id.about -> Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
-                R.id.exit -> exitProcess(1)
+                R.id.exit -> {
+                    val builder = MaterialAlertDialogBuilder(this)
+                    builder.setTitle("EXit")
+                        .setMessage("Do you want to exit App?")
+                        //first _ show dialog and 2nd _ show result
+                        .setPositiveButton("Yes"){ _, _ ->
+                            if (SongActivity.musicService != null) {
+                                SongActivity.musicService!!.stopForeground(true)
+                                SongActivity.musicService!!.mediaPlayer!!.release()
+                                SongActivity.musicService = null
+                            }
+                            exitProcess(1)
+                        }
+                        .setNegativeButton("No"){dialog, _ ->
+                            dialog.dismiss()
+                        }
+
+                    val exitDialog = builder.create()
+                    exitDialog.show()
+                    exitDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+                    exitDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+
+                }
             }
             true
         }
@@ -194,16 +220,23 @@ class HomeActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    @SuppressLint("DefaultLocale")
-    private fun formatSongDuration(duration: Long): String {
-        val minutes = (duration / 1000 / 60).toInt()
-        val seconds = (duration / 1000 % 60).toInt()
-        return String.format("%02d:%02d", minutes, seconds)
-    }
+
 
     private fun hasReadMediaAudioPermission() =
         ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_AUDIO) == PackageManager.PERMISSION_GRANTED
 
     private fun hasReadExternalStoragePermission() =
         ActivityCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
+    //run when app is closed
+    override fun onDestroy() {
+        super.onDestroy()
+        if (!SongActivity.isPlaying && SongActivity.musicService != null){
+            SongActivity.musicService!!.stopForeground(true)
+            SongActivity.musicService!!.mediaPlayer!!.release()
+            SongActivity.musicService = null
+            exitProcess(1)
+
+        }
+    }
 }
