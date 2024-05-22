@@ -88,12 +88,7 @@ class HomeActivity : AppCompatActivity() {
                         .setMessage("Do you want to exit App?")
                         //first _ show dialog and 2nd _ show result
                         .setPositiveButton("Yes"){ _, _ ->
-                            if (SongActivity.musicService != null) {
-                                SongActivity.musicService!!.stopForeground(true)
-                                SongActivity.musicService!!.mediaPlayer!!.release()
-                                SongActivity.musicService = null
-                            }
-                            exitProcess(1)
+                            terminateApp()
                         }
                         .setNegativeButton("No"){dialog, _ ->
                             dialog.dismiss()
@@ -232,11 +227,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         if (!SongActivity.isPlaying && SongActivity.musicService != null){
-            SongActivity.musicService!!.stopForeground(true)
-            SongActivity.musicService!!.mediaPlayer!!.release()
-            SongActivity.musicService = null
-            exitProcess(1)
-
+            terminateApp()
         }
     }
 }

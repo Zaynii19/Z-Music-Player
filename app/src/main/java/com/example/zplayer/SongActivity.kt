@@ -6,10 +6,15 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Color
 import android.media.MediaPlayer
+import android.media.audiofx.AudioEffect
+import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.LinearLayout
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -17,6 +22,10 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.zplayer.databinding.ActivitySongBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlin.system.exitProcess
+
 //ServiceConnection add service connection to activity and implement members
 //MediaPlayer.OnCompletionListener restart next song when song is complete
 class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener{
@@ -29,6 +38,9 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         @SuppressLint("StaticFieldLeak")
         lateinit var binding: ActivitySongBinding
         var repeat : Boolean = false
+        var min15: Boolean = false
+        var min30: Boolean = false
+        var min60: Boolean = false
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,6 +119,10 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         if (repeat){
             binding.repeatBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
         }
+
+        if (min15 || min30 || min60){
+            binding.timerBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
+        }
     }
 
     //play song
@@ -130,7 +146,7 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
             binding.seekbar.max = musicService!!.mediaPlayer!!.duration
             musicService!!.mediaPlayer!!.setOnCompletionListener (this)
 
-            //below buttons
+            //repeat button functionality
             binding.repeatBtn.setOnClickListener {
                 if (!repeat){
                     repeat = true
@@ -140,6 +156,58 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
                     binding.repeatBtn.setColorFilter(ContextCompat.getColor(this, R.color.AppRedButtons))
                 }
             }
+
+            //equalizer button functionality
+            binding.equalizerBtn.setOnClickListener {
+                try {
+                    val eqIntent = Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)
+                    eqIntent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, musicService!!.mediaPlayer!!.audioSessionId)
+                    eqIntent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME, baseContext.packageName)
+                    eqIntent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE, AudioEffect.CONTENT_TYPE_MUSIC)
+                    startActivityForResult(eqIntent, 19)
+                }catch (e: Exception){
+                    Toast.makeText(this, "Equalizer Feature not Sported!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            //timer button functionality
+            binding.timerBtn.setOnClickListener {
+                val timer = min15 || min30 || min60
+                if (!timer)
+                showBottomSheetDialog()
+                else{
+                    val builder = MaterialAlertDialogBuilder(this)
+                    builder.setTitle("Stop Timer")
+                        .setMessage("Do you want to stop Timer?")
+                        //first _ show dialog and 2nd _ show result
+                        .setPositiveButton("Yes"){ _, _ ->
+                            min15 = false
+                            min30 = false
+                            min60 = false
+
+                            binding.timerBtn.setColorFilter(ContextCompat.getColor(this, R.color.AppRedButtons))
+                        }
+                        .setNegativeButton("No"){dialog, _ ->
+                            dialog.dismiss()
+                        }
+
+                    val exitDialog = builder.create()
+                    exitDialog.show()
+                    exitDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+                    exitDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+                }
+            }
+
+            //share button functionality
+            binding.shareBtn.setOnClickListener {
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.type = "audio/*"
+                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(songListSA[songIndex].path))
+                startActivity(Intent.createChooser(shareIntent, "Share Music File"))
+            }
+
+
 
         }catch (e:Exception){
             return
@@ -211,6 +279,59 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
             setLayout()
         }catch (e:Exception){
             return
+        }
+    }
+
+    @Deprecated("This method has been deprecated in favor of using the Activity Result API\n      which brings increased type safety via an {@link ActivityResultContract} and the prebuilt\n      contracts for common intents available in\n      {@link androidx.activity.result.contract.ActivityResultContracts}, provides hooks for\n      testing, and allow receiving results in separate, testable classes independent from your\n      activity. Use\n      {@link #registerForActivityResult(ActivityResultContract, ActivityResultCallback)}\n      with the appropriate {@link ActivityResultContract} and handling the result in the\n      {@link ActivityResultCallback#onActivityResult(Object) callback}.")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 19 || resultCode == RESULT_OK){
+            return
+        }
+    }
+
+    private fun showBottomSheetDialog(){
+        val dialog = BottomSheetDialog(this)
+        dialog.setContentView(R.layout.timer_bottomsheet_dialog)
+        dialog.show()
+
+        dialog.findViewById<LinearLayout>(R.id.min_15)?.setOnClickListener {
+            Toast.makeText(this, "Music App Closed in 15 Minutes", Toast.LENGTH_SHORT).show()
+            binding.timerBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
+
+            min15 = true
+            Thread{
+                Thread.sleep(9000000)
+                if (min15) terminateApp()
+            }.start()
+
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<LinearLayout>(R.id.min_30)?.setOnClickListener {
+            Toast.makeText(this, "Music App Closed in 30 Minutes", Toast.LENGTH_SHORT).show()
+            binding.timerBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
+
+            min30 = true
+            Thread{
+                Thread.sleep(1800000)
+                if (min30) terminateApp()
+            }.start()
+
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<LinearLayout>(R.id.min_60)?.setOnClickListener {
+            Toast.makeText(this, "Music App Closed in 60 Minutes", Toast.LENGTH_SHORT).show()
+            binding.timerBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
+
+            min60 = true
+            Thread{
+                Thread.sleep(3600000)
+                if (min60) terminateApp()
+            }.start()
+
+            dialog.dismiss()
         }
     }
 }

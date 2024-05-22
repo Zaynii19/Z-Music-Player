@@ -2,6 +2,7 @@ package com.example.zplayer
 
 import android.annotation.SuppressLint
 import android.media.MediaMetadataRetriever
+import kotlin.system.exitProcess
 
 //Data class for songs
 data class SongsLists(
@@ -44,4 +45,13 @@ fun formatSongDuration(duration: Long): String {
     val minutes = (duration / 1000 / 60).toInt()
     val seconds = (duration / 1000 % 60).toInt()
     return String.format("%02d:%02d", minutes, seconds)
+}
+
+fun terminateApp(){
+    if (SongActivity.musicService != null) {
+        SongActivity.musicService!!.stopForeground(true)
+        SongActivity.musicService!!.mediaPlayer!!.release()
+        SongActivity.musicService = null
+    }
+    exitProcess(1)
 }
