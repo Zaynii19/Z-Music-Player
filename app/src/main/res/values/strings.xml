@@ -33,4 +33,5 @@
     <string name="_15_minutes">15 Minutes</string>
     <string name="_30_minutes">30 Minutes</string>
     <string name="_60_minutes">60 Minutes</string>
+    <string name="search_view">Search View</string>
 </resources>

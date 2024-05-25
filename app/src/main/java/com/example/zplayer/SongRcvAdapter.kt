@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.zplayer.databinding.SongViewItemBinding
 
-class SongRcvAdapter(private val context: Context, private val musicList: MutableList<SongsLists>) :
+class SongRcvAdapter(private val context: Context, private var musicList: MutableList<SongsLists>) :
     RecyclerView.Adapter<SongRcvAdapter.MyViewHolder>() {
 
     class MyViewHolder(binding: SongViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -40,10 +40,25 @@ class SongRcvAdapter(private val context: Context, private val musicList: Mutabl
             .into(holder.img)
 
         holder.root.setOnClickListener {
-            val intent = Intent(context, SongActivity::class.java)
-            intent.putExtra("index", position)
-            intent.putExtra("class", "SongRcvAdapter")
-            ContextCompat.startActivity(context, intent, null)
+            when {
+                HomeActivity.search -> sendIntent("SongRcvAdapterSearch", position)
+                else -> sendIntent("SongRcvAdapter", position)
+            }
+
         }
+    }
+
+    //update song list after search
+    fun updateMusicList(searchList: MutableList<SongsLists>){
+        musicList = mutableListOf()
+        musicList.addAll(searchList)
+        notifyDataSetChanged()
+    }
+
+    private fun sendIntent(reference: String, pos: Int){
+        val intent = Intent(context, SongActivity::class.java)
+        intent.putExtra("index", pos)
+        intent.putExtra("class", reference)
+        ContextCompat.startActivity(context, intent, null)
     }
 }

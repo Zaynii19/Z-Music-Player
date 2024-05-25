@@ -7,21 +7,25 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.CalendarContract.Colors
 import android.provider.MediaStore
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.zplayer.databinding.ActivityHomeBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import kotlin.system.exitProcess
+
 
 class HomeActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -38,6 +42,8 @@ class HomeActivity : AppCompatActivity() {
     // Static single object of class can be accessed by any class
     companion object {
         lateinit var songListMA: MutableList<SongsLists>
+        lateinit var songListSearch: MutableList<SongsLists>
+        var search: Boolean = false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +57,9 @@ class HomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val toolbar: Toolbar = binding.toolbar
+        setSupportActionBar(toolbar)
 
         songListMA = mutableListOf()
 
@@ -133,6 +142,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
+        search = false
         binding.rcv.setHasFixedSize(true)
         binding.rcv.setItemViewCacheSize(13)
         binding.rcv.layoutManager = LinearLayoutManager(this)
@@ -229,5 +239,30 @@ class HomeActivity : AppCompatActivity() {
         if (!SongActivity.isPlaying && SongActivity.musicService != null){
             terminateApp()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.search_view_menu, menu)
+        val searchView = menu?.findItem(R.id.search_view)?.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            //call when user hit enter after search
+            override fun onQueryTextSubmit(query: String?): Boolean = true
+            //call when user type query
+            override fun onQueryTextChange(newText: String?): Boolean {
+                songListSearch = mutableListOf()
+                if (newText != null){
+                    val userInput = newText.lowercase()
+                    for (song in songListMA){
+                        if (song.title.lowercase().contains(userInput)){
+                            songListSearch.add(song)
+                        }
+                        search = true
+                        songAdapter.updateMusicList(songListSearch )
+                    }
+                }
+                return true
+            }
+        })
+        return super.onCreateOptionsMenu(menu)
     }
 }

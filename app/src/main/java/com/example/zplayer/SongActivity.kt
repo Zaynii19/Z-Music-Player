@@ -28,6 +28,7 @@ import kotlin.system.exitProcess
 
 //ServiceConnection add service connection to activity and implement members
 //MediaPlayer.OnCompletionListener restart next song when song is complete
+@Suppress("DEPRECATION")
 class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener{
     companion object {
         lateinit var songListSA: MutableList<SongsLists>
@@ -217,6 +218,10 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
     private fun initializeLayout(){
         songIndex = intent.getIntExtra("index", 0)
         when(intent.getStringExtra("class")){
+            "SongRcvAdapterSearch" -> {
+                songListSA.addAll(HomeActivity.songListSearch)
+                setLayout()
+            }
             "SongRcvAdapter" -> {
                 songListSA.addAll(HomeActivity.songListMA)
                 setLayout()
