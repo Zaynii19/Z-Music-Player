@@ -87,6 +87,8 @@ class MusicService : Service(){
             SongActivity.binding.songTotalLength.text = SongActivity.songListSA[SongActivity.songIndex].formattedDuration
             SongActivity.binding.songStartLength.text = formatSongDuration(mediaPlayer!!.currentPosition.toLong())
 
+            SongActivity.nowPlayedId = SongActivity.songListSA[SongActivity.songIndex].id
+
         }catch (e:Exception){
             return
         }

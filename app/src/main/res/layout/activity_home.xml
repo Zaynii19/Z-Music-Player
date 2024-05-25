@@ -10,130 +10,147 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="30dp">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:theme="?attr/actionBarTheme"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-        <!--for buttons-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
 
-            <ImageButton
-                android:id="@+id/shuffleBtn"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="?attr/actionBarTheme"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+            <!--for buttons-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/shuffleBtn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/shuffle"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/shuffle"
+                    app:tint="#E91E63" />
+
+
+                <ImageButton
+                    android:id="@+id/favBtn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/favourite"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/fav"
+                    app:tint="#E91E63" />
+
+                <ImageButton
+                    android:id="@+id/playlistBtn"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/playlist"
+                    android:scaleType="fitCenter"
+                    app:srcCompat="@drawable/playlist"
+                    app:tint="#E91E63" />
+
+            </LinearLayout>
+            <!--for buttons texts-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/shuffleBtnText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/shuffle"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/favBtnText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/favourite"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/playlistBtnText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/playlist"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/totalSongs"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:contentDescription="@string/shuffle"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/shuffle"
-                app:tint="#E91E63" />
+                android:layout_margin="10dp"
+                android:text="@string/total_songs"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-
-            <ImageButton
-                android:id="@+id/favBtn"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:contentDescription="@string/favourite"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/fav"
-                app:tint="#E91E63" />
-
-            <ImageButton
-                android:id="@+id/playlistBtn"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:contentDescription="@string/playlist"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/playlist"
-                app:tint="#E91E63" />
+                android:layout_marginBottom="10dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:scrollbarSize="10dp"
+                android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+                android:scrollbarTrackVertical="@drawable/scrollbar_track"
+                tools:listitem="@layout/song_view_item"/>
 
         </LinearLayout>
-        <!--for buttons texts-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/shuffleBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/shuffle"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/favBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/favourite"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/playlistBtnText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/playlist"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/totalSongs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/total_songs"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nowPlaying"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="vertical"
-            android:scrollbarSize="10dp"
-            android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
-            android:scrollbarTrackVertical="@drawable/scrollbar_track"
-            tools:listitem="@layout/song_view_item"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:name="com.example.zplayer.NowPlayingFragment"
+            tools:layout="@layout/fragment_now_playing"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navBar"

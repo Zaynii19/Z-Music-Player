@@ -34,4 +34,6 @@
     <string name="_30_minutes">30 Minutes</string>
     <string name="_60_minutes">60 Minutes</string>
     <string name="search_view">Search View</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

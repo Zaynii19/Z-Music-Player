@@ -31,6 +31,7 @@ class BroadcastNotiReceiver : BroadcastReceiver(){
         SongActivity.musicService!!.mediaPlayer!!.start()
         SongActivity.musicService!!.showNotification(R.drawable.noti_pause)
         SongActivity.binding.pauseSong.setIconResource(R.drawable.pause )
+        NowPlayingFragment.binding.playPauseBtn.setImageResource(R.drawable.pause)
     }
 
     private fun pauseMusic(){
@@ -38,18 +39,30 @@ class BroadcastNotiReceiver : BroadcastReceiver(){
         SongActivity.musicService!!.mediaPlayer!!.pause()
         SongActivity.musicService!!.showNotification(R.drawable.noti_play)
         SongActivity.binding.pauseSong.setIconResource(R.drawable.play )
+        NowPlayingFragment.binding.playPauseBtn.setImageResource(R.drawable.play)
     }
 
     private fun prevNextSong(thisNext : Boolean, context: Context?){
         setSongPosition(next = thisNext)
         SongActivity.musicService!!.createMediaPlayer()
+        //change the layout of Song Activity
         Glide.with(context!!)
             .load(SongActivity.songListSA[SongActivity.songIndex].artUri)
             .apply(RequestOptions().placeholder(R.drawable.music_player))  //if error in loading song album pic or have no pic
             .into(SongActivity.binding.songPic)
 
         SongActivity.binding.songName.text = SongActivity.songListSA[SongActivity.songIndex].title
+        SongActivity.binding.songName.setSelected(true)
         SongActivity.binding.songTotalLength.text = SongActivity.songListSA[SongActivity.songIndex].formattedDuration
         playMusic()
+
+        //change the layout of Now Playing Fragment
+        Glide.with(context)
+            .load(SongActivity.songListSA[SongActivity.songIndex].artUri)
+            .apply(RequestOptions().placeholder(R.drawable.music_player))  //if error in loading song album pic or have no pic
+            .into(NowPlayingFragment.binding.songPicF)
+
+        NowPlayingFragment.binding.songNameF.text = SongActivity.songListSA[SongActivity.songIndex].title
+        NowPlayingFragment.binding.songNameF.setSelected(true)
     }
 }

@@ -42,6 +42,12 @@ class SongRcvAdapter(private val context: Context, private var musicList: Mutabl
         holder.root.setOnClickListener {
             when {
                 HomeActivity.search -> sendIntent("SongRcvAdapterSearch", position)
+
+                //when same song is played again
+                musicList[position].id == SongActivity.nowPlayedId -> {
+                    sendIntent("NowPlaying", SongActivity.songIndex)
+                }
+
                 else -> sendIntent("SongRcvAdapter", position)
             }
 

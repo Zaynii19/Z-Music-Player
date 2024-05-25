@@ -62,6 +62,7 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         songListMA = mutableListOf()
+        songListSearch = mutableListOf()
 
         // Define toggle
         toggle = ActionBarDrawerToggle(this, binding.main, binding.toolbar, R.string.open, R.string.close)
@@ -257,7 +258,7 @@ class HomeActivity : AppCompatActivity() {
                             songListSearch.add(song)
                         }
                         search = true
-                        songAdapter.updateMusicList(songListSearch )
+                        songAdapter.updateMusicList(songListSearch)
                     }
                 }
                 return true
