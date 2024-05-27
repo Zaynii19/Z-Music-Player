@@ -56,4 +56,7 @@ dependencies {
     implementation (libs.glide)
     //Notification media in android
     implementation(libs.androidx.media)
+    //gson
+    implementation (libs.gson)
+
 }

@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.zplayer.SongActivity.Companion.songListSA
 import com.example.zplayer.databinding.ActivitySongBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,6 +30,7 @@ import kotlin.system.exitProcess
 
 @Suppress("DEPRECATION")
 class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
+    private lateinit var favSongAdapter: FavRcvAdapter
     companion object {
         lateinit var songListSA: MutableList<SongsLists>
         var songIndex: Int = 0
@@ -41,6 +43,8 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         var min30: Boolean = false
         var min60: Boolean = false
         var nowPlayedId : String = ""
+        var isFav: Boolean = false
+        var fSongIndex: Int = -1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -138,9 +142,25 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
             shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(songListSA[songIndex].path))
             startActivity(Intent.createChooser(shareIntent, "Share Music File"))
         }
+
+        binding.favBtn.setOnClickListener {
+            if (isFav){
+                binding.favBtn.setImageResource(R.drawable.empty_fav)
+                isFav = false
+                FavActivity.songListFA.removeAt(fSongIndex)
+                FavActivity.favSongAdapter.updateMusicList(FavActivity.songListFA)
+
+            }else{
+                binding.favBtn.setImageResource(R.drawable.fav)
+                isFav = true
+                FavActivity.songListFA.add(songListSA[songIndex])
+            }
+        }
     }
 
     private fun setLayout() {
+        fSongIndex = favChecker(songListSA[songIndex].id)
+
         Glide.with(this)
             .load(songListSA[songIndex].artUri)
             .apply(RequestOptions().placeholder(R.drawable.music_player))
@@ -155,6 +175,12 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
 
         if (min15 || min30 || min60) {
             binding.timerBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
+        }
+
+        if (isFav){
+            binding.favBtn.setImageResource(R.drawable.fav)
+        }else{
+            binding.favBtn.setImageResource(R.drawable.empty_fav)
         }
     }
 
@@ -188,6 +214,23 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         songIndex = intent.getIntExtra("index", 0)
         val sourceClass = intent.getStringExtra("class")
         when (sourceClass) {
+
+            "FavShuffle" -> {
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                songListSA.addAll(FavActivity.songListFA)
+                songListSA.shuffle()
+                setLayout()
+            }
+
+            "FavAdapter" -> {
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                songListSA.addAll(FavActivity.songListFA)
+                setLayout()
+            }
 
             "NowPlaying" -> {
                 //check whether the song is searched

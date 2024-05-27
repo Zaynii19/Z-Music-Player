@@ -64,5 +64,13 @@ class BroadcastNotiReceiver : BroadcastReceiver(){
 
         NowPlayingFragment.binding.songNameF.text = SongActivity.songListSA[SongActivity.songIndex].title
         NowPlayingFragment.binding.songNameF.setSelected(true)
+
+        //set filled heart if next song is fav
+        SongActivity.fSongIndex = favChecker(SongActivity.songListSA[SongActivity.songIndex].id)
+        if (SongActivity.isFav){
+            SongActivity.binding.favBtn.setImageResource(R.drawable.fav)
+        }else{
+            SongActivity.binding.favBtn.setImageResource(R.drawable.empty_fav)
+        }
     }
 }

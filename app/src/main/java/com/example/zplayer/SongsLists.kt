@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.zplayer
 
 import android.annotation.SuppressLint
@@ -54,4 +56,17 @@ fun terminateApp(){
         SongActivity.musicService = null
     }
     exitProcess(1)
+}
+
+fun favChecker(id: String): Int {
+    FavActivity.songListFA.forEachIndexed { index, song ->
+        SongActivity.isFav = false
+        //checks on click fav button the current song is already present in fav songs
+        if (id == song.id){
+            SongActivity.isFav = true
+            return index
+        }
+    }
+
+    return -1
 }

@@ -25,6 +25,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.zplayer.databinding.ActivityHomeBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 
 
 class HomeActivity : AppCompatActivity() {
@@ -71,6 +74,17 @@ class HomeActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
+
+        //for retrieving fav songs using shared preferences
+        FavActivity.songListFA = mutableListOf()
+        val editor = getSharedPreferences("FAVSONG", MODE_PRIVATE)
+        val jsonString = editor.getString("FavSongs", null)
+        val typeTocken = object : TypeToken<MutableList<SongsLists>>(){}.type
+        if (jsonString != null){
+            val data: MutableList<SongsLists> = GsonBuilder().create().fromJson(jsonString, typeTocken)
+            FavActivity.songListFA.addAll(data)
+        }
+
 
         binding.playlistBtn.setOnClickListener {
             startActivity(Intent(this, PlaylistActivity::class.java))
@@ -240,6 +254,16 @@ class HomeActivity : AppCompatActivity() {
         if (!SongActivity.isPlaying && SongActivity.musicService != null){
             terminateApp()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        //for storing fav songs using shared preferences
+        val editor = getSharedPreferences("FAVSONG", MODE_PRIVATE).edit()
+        val jsonString = GsonBuilder().create().toJson(FavActivity.songListFA)
+        editor.putString("FavSongs", jsonString)
+        editor.apply()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
