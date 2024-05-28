@@ -47,10 +47,11 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/addPlaylist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
-        app:icon="@drawable/add"
+        app:icon="@drawable/add_float"
         app:iconSize="35dp"
         app:iconTint="@color/cool_pink"
         app:strokeWidth="2dp"
@@ -61,5 +62,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.732" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/playlist_item_list"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
+        android:scrollbarSize="10dp"
+        android:paddingBottom="40dp"
+        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:scrollbarTrackVertical="@drawable/scrollbar_track"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

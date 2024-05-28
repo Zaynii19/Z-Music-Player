@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="15dp"
+    android:layout_margin="10dp"
+    app:strokeWidth="2dp"
+    app:strokeColor="@color/cool_pink">
+
+    <ImageView
+        android:id="@+id/songPic"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:padding="10dp"
+        android:src="@drawable/music_player"
+        android:layout_margin="5dp"/>
+    
+    <TextView
+        android:id="@+id/playListName"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:text="@string/playlist_name"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="110dp"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+
+    <ImageButton
+        android:id="@+id/delBtn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/circular_buttons"
+        android:padding="12dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/bin"
+        app:tint="@color/white"
+        android:layout_marginTop="110dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="110dp"/>
+
+
+</com.google.android.material.card.MaterialCardView>

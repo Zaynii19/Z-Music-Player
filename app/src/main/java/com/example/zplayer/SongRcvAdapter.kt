@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.zplayer.databinding.SongViewItemBinding
 
-class SongRcvAdapter(private val context: Context, private var musicList: MutableList<SongsLists>) :
+class SongRcvAdapter(private val context: Context, private var musicList: MutableList<SongsLists>, private var playlistDetails: Boolean = false, private val selection: Boolean = false) :
     RecyclerView.Adapter<SongRcvAdapter.MyViewHolder>() {
 
     class MyViewHolder(binding: SongViewItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -29,6 +29,8 @@ class SongRcvAdapter(private val context: Context, private var musicList: Mutabl
         return musicList.size
     }
 
+
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.title.text = musicList[position].title
         holder.album.text = musicList[position].album
@@ -39,18 +41,34 @@ class SongRcvAdapter(private val context: Context, private var musicList: Mutabl
             .apply(RequestOptions().placeholder(R.drawable.music_player))  // Placeholder image
             .into(holder.img)
 
-        holder.root.setOnClickListener {
-            when {
-                HomeActivity.search -> sendIntent("SongRcvAdapterSearch", position)
-
-                //when same song is played again
-                musicList[position].id == SongActivity.nowPlayedId -> {
-                    sendIntent("NowPlaying", SongActivity.songIndex)
+        when{
+            playlistDetails -> {
+                holder.root.setOnClickListener {
+                    sendIntent("PlaylistDetailsAdapter", position)
                 }
-
-                else -> sendIntent("SongRcvAdapter", position)
             }
 
+            selection -> {
+                holder.root.setOnClickListener {
+                    if (addRemoveSong(musicList[position]))
+                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.cool_pink ))
+                    else
+                        holder.root.setBackgroundColor(ContextCompat.getColor(context, R.color.white ))
+                }
+            }
+
+            else -> {
+                holder.root.setOnClickListener {
+                    when {
+                        HomeActivity.search -> sendIntent("SongRcvAdapterSearch", position)
+                        //when same song is played again
+                        musicList[position].id == SongActivity.nowPlayedId -> {
+                            sendIntent("NowPlaying", SongActivity.songIndex)
+                        }
+                        else -> sendIntent("SongRcvAdapter", position)
+                    }
+                }
+            }
         }
     }
 
@@ -67,4 +85,23 @@ class SongRcvAdapter(private val context: Context, private var musicList: Mutabl
         intent.putExtra("class", reference)
         ContextCompat.startActivity(context, intent, null)
     }
-}
+
+    //add and remove the songs from playlist in selection activity
+    private fun addRemoveSong(song: SongsLists): Boolean {
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList.forEachIndexed{index, music ->
+            if (song.id == music.id){
+                PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList.removeAt(index)
+                return false
+            }
+        }
+
+        PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList.add(song)
+        return true
+    }
+
+    fun refreshPlaylist(){
+        musicList = mutableListOf()
+        musicList = PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList
+        notifyDataSetChanged()
+    }
+    }

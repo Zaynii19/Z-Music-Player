@@ -77,12 +77,20 @@ class HomeActivity : AppCompatActivity() {
 
         //for retrieving fav songs using shared preferences
         FavActivity.songListFA = mutableListOf()
-        val editor = getSharedPreferences("FAVSONG", MODE_PRIVATE)
-        val jsonString = editor.getString("FavSongs", null)
-        val typeTocken = object : TypeToken<MutableList<SongsLists>>(){}.type
-        if (jsonString != null){
-            val data: MutableList<SongsLists> = GsonBuilder().create().fromJson(jsonString, typeTocken)
+        val editorFav = getSharedPreferences("FAVSONG", MODE_PRIVATE)
+        val favJsonString = editorFav.getString("FavSongs", null)
+        val typeTockenFav = object : TypeToken<MutableList<SongsLists>>(){}.type
+        if (favJsonString != null){
+            val data: MutableList<SongsLists> = GsonBuilder().create().fromJson(favJsonString, typeTockenFav)
             FavActivity.songListFA.addAll(data)
+        }
+
+        //for retrieving playlist using shared preferences
+        PlaylistActivity.musicPlaylist = MusicPlaylist()
+        val playJsonString = editorFav.getString("Playlist", null)
+        if (playJsonString != null){
+            val dataPlayList: MusicPlaylist = GsonBuilder().create().fromJson(playJsonString, MusicPlaylist::class.java)
+            PlaylistActivity.musicPlaylist = dataPlayList
         }
 
 
@@ -259,10 +267,13 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        //for storing fav songs using shared preferences
         val editor = getSharedPreferences("FAVSONG", MODE_PRIVATE).edit()
-        val jsonString = GsonBuilder().create().toJson(FavActivity.songListFA)
-        editor.putString("FavSongs", jsonString)
+        //for storing fav songs using shared preferences
+        val favJsonString = GsonBuilder().create().toJson(FavActivity.songListFA)
+        editor.putString("FavSongs", favJsonString)
+        //for storing playlists using shared preferences
+        val playlistJsonString = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+        editor.putString("Playlist", playlistJsonString)
         editor.apply()
     }
 

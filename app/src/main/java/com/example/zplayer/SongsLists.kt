@@ -17,6 +17,17 @@ data class SongsLists(
     val artUri:String
 )
 
+class Playlist{
+    lateinit var name: String
+    lateinit var playList:MutableList<SongsLists>
+    lateinit var createdBy:String
+    lateinit var createdOn:String
+}
+
+class MusicPlaylist{
+    var ref: MutableList<Playlist> = mutableListOf()
+}
+
 //Set notification image to current song image
 fun getImageArt(path: String): ByteArray? {
     val retriever = MediaMetadataRetriever()

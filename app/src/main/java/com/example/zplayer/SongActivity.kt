@@ -215,6 +215,23 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         val sourceClass = intent.getStringExtra("class")
         when (sourceClass) {
 
+            "PlaylistDetailsShuffle" -> {
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                songListSA.addAll(PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList)
+                songListSA.shuffle()
+                setLayout()
+            }
+
+            "PlaylistDetailsAdapter" -> {
+                val intent = Intent(this, MusicService::class.java)
+                bindService(intent, this, BIND_AUTO_CREATE)
+                startService(intent)
+                songListSA.addAll(PlaylistActivity.musicPlaylist.ref[PlaylistDetailsActivity.currentPlaylistPos].playList)
+                setLayout()
+            }
+
             "FavShuffle" -> {
                 val intent = Intent(this, MusicService::class.java)
                 bindService(intent, this, BIND_AUTO_CREATE)
@@ -274,9 +291,6 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
                 setLayout()
             }
         }
-
-        Log.d("SongActivity", "songListSA size: ${songListSA.size}")
-        Log.d("SongActivity", "songIndex: $songIndex")
     }
 
     private fun playMusic() {
