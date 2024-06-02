@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,7 @@ import com.example.zplayer.databinding.ActivityPlaylistDetailsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.GsonBuilder
 
+@Suppress("DEPRECATION")
 class PlaylistDetailsActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityPlaylistDetailsBinding.inflate(layoutInflater)
@@ -37,6 +39,17 @@ class PlaylistDetailsActivity : AppCompatActivity() {
             insets
         }
 
+        currentPlaylistPos = intent.extras?.getInt("index", -1) ?: -1
+
+        if (currentPlaylistPos == -1) {
+            Toast.makeText(this, "Playlist not found", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        //update song lists
+        PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playList = checkPlaylist(PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playList)
+
         binding.back.setOnClickListener {
             finish()
         }
@@ -47,8 +60,6 @@ class PlaylistDetailsActivity : AppCompatActivity() {
             intent.putExtra("class", "PlaylistDetailsShuffle")
             startActivity(intent)
         }
-
-        currentPlaylistPos = intent.extras?.get("index") as Int
 
         binding.rcv.setHasFixedSize(true)
         binding.rcv.setItemViewCacheSize(13)
@@ -65,7 +76,6 @@ class PlaylistDetailsActivity : AppCompatActivity() {
             val builder = MaterialAlertDialogBuilder(this)
             builder.setTitle("Remove Playlist")
                 .setMessage("Do you want to Remove Playlist?")
-                //first _ show dialog and 2nd _ show result
                 .setPositiveButton("Yes"){ dialog, _ ->
                     PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playList.clear()
                     adapter.refreshPlaylist()
@@ -94,10 +104,9 @@ class PlaylistDetailsActivity : AppCompatActivity() {
         }
 
         if (adapter.itemCount > 0){
-            // Set song playlist image using Glide
             Glide.with(this)
                 .load(PlaylistActivity.musicPlaylist.ref[currentPlaylistPos].playList[0].artUri)
-                .apply(RequestOptions().placeholder(R.drawable.music_pic))  // Placeholder image
+                .apply(RequestOptions().placeholder(R.drawable.music_pic))
                 .into(binding.playlistImage)
 
             binding.shuffleBtn.visibility = View.VISIBLE
@@ -105,11 +114,10 @@ class PlaylistDetailsActivity : AppCompatActivity() {
 
         adapter.notifyDataSetChanged()
 
-        //for storing playlists using shared preferences
         val editor = getSharedPreferences("FAVSONG", MODE_PRIVATE).edit()
         val playlistJsonString = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
         editor.putString("Playlist", playlistJsonString)
         editor.apply()
-
     }
+
 }

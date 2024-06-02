@@ -21,6 +21,12 @@
         android:theme="@style/Theme.ZPlayer"
         tools:targetApi="31">
         <activity
+            android:name=".AboutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingActivity"
+            android:exported="false" />
+        <activity
             android:name=".SelectionActivity"
             android:exported="false" />
         <activity

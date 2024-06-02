@@ -112,8 +112,10 @@ class HomeActivity : AppCompatActivity() {
         // Navigation items functionality
         binding.navBar.setNavigationItemSelectedListener {
             when (it.itemId) {
-                R.id.settings -> Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
-                R.id.about -> Toast.makeText(this, "About", Toast.LENGTH_SHORT).show()
+                R.id.settings ->
+                    startActivity(Intent(this, SettingActivity::class.java))
+                R.id.about ->
+                    startActivity(Intent(this, AboutActivity::class.java))
                 R.id.exit -> {
                     val builder = MaterialAlertDialogBuilder(this)
                     builder.setTitle("EXit")

@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.zplayer.databinding.PlaylistItemListBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
 
 class PlaylistRcvAdapter(private val context: Context, private var playlistList: MutableList<Playlist>): RecyclerView.Adapter<PlaylistRcvAdapter.MyViewHolder>() {
     class MyViewHolder(binding : PlaylistItemListBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -30,20 +31,20 @@ class PlaylistRcvAdapter(private val context: Context, private var playlistList:
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.name.setSelected(true)
+        holder.name.isSelected = true
         holder.name.text = playlistList[position].name
 
         holder.delete.setOnClickListener {
             val builder = MaterialAlertDialogBuilder(context)
             builder.setTitle(playlistList[position].name)
-                .setMessage("Do you want to Delete Playlist?")
-                //first _ show dialog and 2nd _ show result
-                .setPositiveButton("Yes"){ dialog, _ ->
+                .setMessage("Do you want to delete the playlist?")
+                .setPositiveButton("Yes") { dialog, _ ->
                     PlaylistActivity.musicPlaylist.ref.removeAt(position)
                     refreshPlaylist()
+                    savePlaylistsToPreferences()
                     dialog.dismiss()
                 }
-                .setNegativeButton("No"){dialog, _ ->
+                .setNegativeButton("No") { dialog, _ ->
                     dialog.dismiss()
                 }
 
@@ -53,14 +54,12 @@ class PlaylistRcvAdapter(private val context: Context, private var playlistList:
             exitDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
         }
 
-        if (PlaylistActivity.musicPlaylist.ref[position].playList.size > 0){
-            // Set song playlist image using Glide
+        if (PlaylistActivity.musicPlaylist.ref[position].playList.isNotEmpty()) {
             Glide.with(context)
                 .load(PlaylistActivity.musicPlaylist.ref[position].playList[0].artUri)
-                .apply(RequestOptions().placeholder(R.drawable.music_pic))  // Placeholder image
+                .apply(RequestOptions().placeholder(R.drawable.music_pic))
                 .into(holder.image)
         }
-
 
         holder.root.setOnClickListener {
             val intent = Intent(context, PlaylistDetailsActivity::class.java)
@@ -69,10 +68,18 @@ class PlaylistRcvAdapter(private val context: Context, private var playlistList:
         }
     }
 
-    fun refreshPlaylist(){
+    fun refreshPlaylist() {
         playlistList = mutableListOf()
         playlistList.addAll(PlaylistActivity.musicPlaylist.ref)
         notifyDataSetChanged()
     }
 
+    private fun savePlaylistsToPreferences() {
+        val sharedPreferences = context.getSharedPreferences("FAVSONG", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val playlistJsonString = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
+        editor.putString("Playlist", playlistJsonString)
+        editor.apply()
+    }
 }
+

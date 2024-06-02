@@ -55,7 +55,7 @@ class NowPlayingFragment : Fragment() {
             val intent = Intent(requireContext(), SongActivity::class.java)
             intent.putExtra("index", SongActivity.songIndex)
             intent.putExtra("class", "NowPlaying")
-            startActivity(intent)
+            ContextCompat.startActivity(requireContext(), intent, null)
         }
 
 

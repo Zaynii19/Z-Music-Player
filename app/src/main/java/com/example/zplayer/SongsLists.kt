@@ -4,6 +4,7 @@ package com.example.zplayer
 
 import android.annotation.SuppressLint
 import android.media.MediaMetadataRetriever
+import java.io.File
 import kotlin.system.exitProcess
 
 //Data class for songs
@@ -62,6 +63,7 @@ fun formatSongDuration(duration: Long): String {
 
 fun terminateApp(){
     if (SongActivity.musicService != null) {
+        SongActivity.musicService!!.audioManager.abandonAudioFocus(SongActivity.musicService)
         SongActivity.musicService!!.stopForeground(true)
         SongActivity.musicService!!.mediaPlayer!!.release()
         SongActivity.musicService = null
@@ -80,4 +82,15 @@ fun favChecker(id: String): Int {
     }
 
     return -1
+}
+
+// checks if song from internal storage exists or not if not remove it
+fun checkPlaylist(playlist: MutableList<SongsLists>): MutableList<SongsLists>{
+    playlist.forEachIndexed { index, music ->
+        val file = File(music.path)
+        if (!file.exists())
+            playlist.removeAt(index)
+    }
+    
+    return playlist
 }
