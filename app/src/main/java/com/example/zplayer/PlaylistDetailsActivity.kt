@@ -30,8 +30,11 @@ class PlaylistDetailsActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Setting Theme
+        setTheme(HomeActivity.currentTheme[HomeActivity.themeIndex])
+
         enableEdgeToEdge()
-        setTheme(R.style.coolPink)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

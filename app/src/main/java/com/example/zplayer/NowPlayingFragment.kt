@@ -20,6 +20,10 @@ class NowPlayingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        //set Theme
+        requireContext().theme.applyStyle(HomeActivity.currentTheme[HomeActivity.themeIndex], true)
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_now_playing, container, false)
         binding = FragmentNowPlayingBinding.bind(view)

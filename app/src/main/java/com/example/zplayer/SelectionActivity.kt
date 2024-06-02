@@ -16,7 +16,10 @@ class SelectionActivity : AppCompatActivity() {
     private lateinit var adapter: SongRcvAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.coolPink)
+
+        //Setting Theme
+        setTheme(HomeActivity.currentTheme[HomeActivity.themeIndex])
+
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

@@ -12,7 +12,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@color/cool_pink"
+        android:background="?attr/themeColor"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:background="@color/cool_pink"
+        android:background="?attr/themeColor"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +114,7 @@
             android:contentDescription="@string/shuffle"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/add"
-            app:tint="#E91E63" />
+            app:tint="?attr/themeColor" />
 
         <TextView
             android:id="@+id/addText"
@@ -137,7 +137,7 @@
             android:contentDescription="@string/favourite"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/remove"
-            app:tint="#E91E63" />
+            app:tint="?attr/themeColor" />
 
         <TextView
             android:id="@+id/removeText"
@@ -158,9 +158,9 @@
         android:backgroundTint="@color/white"
         app:icon="@drawable/shuffle"
         app:iconSize="35dp"
-        app:iconTint="@color/cool_pink"
+        app:iconTint="?attr/themeColor"
         app:strokeWidth="2dp"
-        app:strokeColor="@color/cool_pink"
+        app:strokeColor="?attr/themeColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.822"

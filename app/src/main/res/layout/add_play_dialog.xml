@@ -18,8 +18,8 @@
         app:startIconDrawable="@drawable/playlist_reduced"
         app:startIconScaleType="center"
         android:hint="@string/playlist_name"
-        app:hintTextColor="@color/cool_pink"
-        app:startIconTint="@color/cool_pink"
+        app:hintTextColor="?attr/themeColor"
+        app:startIconTint="?attr/themeColor"
         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -45,8 +45,8 @@
         app:startIconDrawable="@drawable/playlist_reduced"
         app:startIconScaleType="center"
         android:hint="@string/your_name"
-        app:startIconTint="@color/cool_pink"
-        app:hintTextColor="@color/cool_pink"
+        app:startIconTint="?attr/themeColor"
+        app:hintTextColor="?attr/themeColor"
         style="@style/ThemeOverlay.Material3.AutoCompleteTextView.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText

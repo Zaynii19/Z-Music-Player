@@ -6,7 +6,7 @@
     app:cardCornerRadius="15dp"
     android:layout_margin="10dp"
     app:strokeWidth="2dp"
-    app:strokeColor="@color/cool_pink">
+    app:strokeColor="?attr/themeColor">
 
     <ImageView
         android:id="@+id/songPic"
@@ -43,7 +43,7 @@
         android:padding="12dp"
         android:scaleType="fitCenter"
         android:src="@drawable/bin"
-        app:tint="@color/white"
+        app:tint="?attr/themeColor"
         android:layout_marginTop="110dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="110dp"/>

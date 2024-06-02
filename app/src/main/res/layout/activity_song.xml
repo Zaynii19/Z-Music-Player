@@ -205,7 +205,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/replay"
-            app:tint="@color/AppRedButtons" />
+            app:tint="?attr/themeColor" />
 
         <ImageButton
             android:id="@+id/equalizerBtn"
@@ -215,7 +215,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/equalizer"
-            app:tint="@color/AppRedButtons" />
+            app:tint="?attr/themeColor" />
 
         <ImageButton
             android:id="@+id/timerBtn"
@@ -225,7 +225,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/timer"
-            app:tint="@color/AppRedButtons" />
+            app:tint="?attr/themeColor" />
 
         <ImageButton
             android:id="@+id/shareBtn"
@@ -235,7 +235,7 @@
             android:layout_weight="1"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/share"
-            app:tint="@color/AppRedButtons" />
+            app:tint="?attr/themeColor" />
 
     </LinearLayout>
 

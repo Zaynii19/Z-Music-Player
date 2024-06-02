@@ -9,23 +9,114 @@
 
     <!-- Theme for Activities -->
     <style name="coolPink" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/cool_pink</item>
         <item name="colorPrimary">@color/purple_588</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/teal_288</item>
         <item name="colorSecondaryVariant">@color/teal_788</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor">@color/cool_pink</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
+    </style>
+    <style name="coolBlue" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/cool_blue</item>
+        <item name="colorPrimary">@color/purple_588</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/teal_288</item>
+        <item name="colorSecondaryVariant">@color/teal_788</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
+    </style>
+    <style name="coolGreen" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/cool_green</item>
+        <item name="colorPrimary">@color/purple_588</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/teal_288</item>
+        <item name="colorSecondaryVariant">@color/teal_788</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
+    </style>
+    <style name="purple" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/purple_588</item>
+        <item name="colorPrimary">@color/purple_588</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/teal_288</item>
+        <item name="colorSecondaryVariant">@color/teal_788</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
+    </style>
+    <style name="black" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/black</item>
+        <item name="colorPrimary">@color/purple_588</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/teal_288</item>
+        <item name="colorSecondaryVariant">@color/teal_788</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
     </style>
 
+    <!-- Theme for MainActivity -->
     <style name="coolPinkNav" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/cool_pink</item>
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/cool_pink</item>
         <item name="colorSecondaryVariant">@color/teal_788</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="android:statusBarColor">@color/cool_pink</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
+    </style>
+    <style name="coolBlueNav" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/cool_blue</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/cool_pink</item>
+        <item name="colorSecondaryVariant">@color/teal_788</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
+    </style>
+    <style name="coolGreenNav" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/cool_green</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/cool_pink</item>
+        <item name="colorSecondaryVariant">@color/teal_788</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
+    </style>
+    <style name="purpleNav" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/purple_588</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/cool_pink</item>
+        <item name="colorSecondaryVariant">@color/teal_788</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
+        <item name="toolbarStyle">@style/ToolbarStyle</item>
+        <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
+    </style>
+    <style name="blackNav" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="themeColor">@color/black</item>
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/cool_pink</item>
+        <item name="colorSecondaryVariant">@color/teal_788</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:statusBarColor">?attr/themeColor</item>
         <item name="toolbarStyle">@style/ToolbarStyle</item>
         <item name="popupMenuStyle">@style/Widget.MaterialComponents.PopupMenu</item>
     </style>

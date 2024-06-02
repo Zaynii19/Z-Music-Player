@@ -33,7 +33,7 @@ class PlaylistActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //Setting Theme
-        setTheme(R.style.coolPink)
+        setTheme(HomeActivity.currentTheme[HomeActivity.themeIndex])
 
         enableEdgeToEdge()
         setContentView(binding.root)

@@ -45,7 +45,7 @@
                     android:contentDescription="@string/shuffle"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/shuffle"
-                    app:tint="#E91E63" />
+                    app:tint="?attr/themeColor" />
 
 
                 <ImageButton
@@ -58,7 +58,7 @@
                     android:contentDescription="@string/favourite"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/fav"
-                    app:tint="#E91E63" />
+                    app:tint="?attr/themeColor" />
 
                 <ImageButton
                     android:id="@+id/playlistBtn"
@@ -70,7 +70,7 @@
                     android:contentDescription="@string/playlist"
                     android:scaleType="fitCenter"
                     app:srcCompat="@drawable/playlist"
-                    app:tint="#E91E63" />
+                    app:tint="?attr/themeColor" />
 
             </LinearLayout>
             <!--for buttons texts-->

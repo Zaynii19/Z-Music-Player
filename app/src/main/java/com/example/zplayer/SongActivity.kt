@@ -53,7 +53,9 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         super.onCreate(savedInstanceState)
         setTheme(R.style.coolPink)
         binding = ActivitySongBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
+        //Setting Theme
+        setTheme(HomeActivity.currentTheme[HomeActivity.themeIndex])
 
         enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

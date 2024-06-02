@@ -41,4 +41,7 @@
     <string name="remove_all">Remove All</string>
     <string name="add">Add</string>
     <string name="select_songs">Select Songs</string>
+    <string name="set_theme">set Theme</string>
+    <string name="sort_by">Sort by</string>
+    <string name="version_name_1_0">Version Name: 1.0</string>
 </resources>

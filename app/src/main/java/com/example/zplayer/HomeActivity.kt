@@ -47,12 +47,20 @@ class HomeActivity : AppCompatActivity() {
         lateinit var songListMA: MutableList<SongsLists>
         lateinit var songListSearch: MutableList<SongsLists>
         var search: Boolean = false
+        var themeIndex: Int = 0
+        val currentTheme = arrayOf(R.style.coolPink, R.style.coolBlue, R.style.coolGreen, R.style.purple, R.style.black)
+        val currentThemeNav = arrayOf(R.style.coolPinkNav, R.style.coolBlueNav, R.style.coolGreenNav, R.style.purpleNav, R.style.blackNav)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setTheme(R.style.coolPinkNav)
+        //for retrieving Theme using shared preferences
+        val themeEditor = getSharedPreferences("THEMES", MODE_PRIVATE)
+        themeIndex = themeEditor.getInt("themeIndex", 0)
+
+        setTheme(currentThemeNav[themeIndex])
+
         enableEdgeToEdge()
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
