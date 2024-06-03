@@ -40,7 +40,17 @@
             android:exported="false" />
         <activity
             android:name=".SongActivity"
-            android:exported="false" />
+            android:exported="false"
+            tools:ignore="AppLinkUrlError">
+
+            <!--use to access audio files from external in app-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="audio/*" android:scheme="content"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".SplashScreen"
             android:exported="true">

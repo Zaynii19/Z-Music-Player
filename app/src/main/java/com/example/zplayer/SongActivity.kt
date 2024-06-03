@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.database.Cursor
 import android.graphics.Color
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -12,6 +13,7 @@ import android.media.audiofx.AudioEffect
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.SeekBar
@@ -70,7 +72,22 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
             finish()
         }
 
-        initializeLayout()
+        //run when song from external source play
+        if (intent.data?.scheme.contentEquals("content")){
+            val intentService = Intent(this, MusicService::class.java)
+            bindService(intentService, this, BIND_AUTO_CREATE)
+            startService(intentService)
+            songListSA = mutableListOf()
+            songListSA.add(getMusicDetails(intent.data!!))
+            Glide.with(this)
+                .load(getImageArt(songListSA[songIndex].path))
+                .apply(RequestOptions().placeholder(R.drawable.music_player))
+                .into(binding.songPic)
+
+            binding.songName.text = songListSA[songIndex].title
+        }else{
+            initializeLayout()
+        }
 
         binding.pauseSong.setOnClickListener {
             if (isPlaying) {
@@ -159,6 +176,23 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
                 isFav = true
                 FavActivity.songListFA.add(songListSA[songIndex])
             }
+        }
+    }
+
+    private fun getMusicDetails(contentUri: Uri): SongsLists {
+        var cursor: Cursor? = null
+        try {
+            val projection = arrayOf(MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.DURATION)
+            cursor = this.contentResolver.query(contentUri, projection, null, null, null)
+            val dataColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+            val durationColumn = cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+            cursor!!.moveToFirst()
+            val path = dataColumn?.let { cursor.getString(it) }
+            val duration = durationColumn?.let { cursor.getLong(it) }
+            val formattedDuration = duration?.let { formatSongDuration(it) }
+            return  SongsLists("Unknown", path.toString(), "Unknown", "Unknown", path.toString(), formattedDuration.toString(), "Unknown")
+        }finally {
+            cursor?.close()
         }
     }
 
@@ -370,5 +404,10 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
 
     override fun onCompletion(mp: MediaPlayer?) {
         preNextSong(true)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (songListSA[songIndex].id == "Unknown" && !isPlaying) exitProcess(1)
     }
 }
