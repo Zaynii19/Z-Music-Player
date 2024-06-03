@@ -9,10 +9,13 @@ import android.graphics.BitmapFactory
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationCompat
 
 //AudioManager.OnAudioFocusChangeListener
@@ -35,7 +38,8 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
         }
     }
 
-    fun showNotification(playPauseBtn : Int){
+    @SuppressLint("ObsoleteSdkInt")
+    fun showNotification(playPauseBtn : Int, playbackSpeed: Float){
 
         //handle when user click on noti direct to song
         val intent = Intent(baseContext, HomeActivity::class.java)
@@ -77,6 +81,17 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             .addAction(R.drawable.noti_exit, "Exit", exitPendingIntent)
             .build()
 
+        //for moving notification seekbar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            mediaSession.setMetadata(MediaMetadataCompat.Builder()
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, mediaPlayer!!.duration.toLong())
+                .build())
+            mediaSession.setPlaybackState(PlaybackStateCompat.Builder()
+                .setState(PlaybackStateCompat.STATE_PLAYING, mediaPlayer!!.currentPosition.toLong(), playbackSpeed)
+                .setActions(PlaybackStateCompat.ACTION_SEEK_TO)
+                .build())
+        }
+
         startForeground(19, notification)
 
     }
@@ -90,7 +105,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             SongActivity.musicService!!.mediaPlayer!!.setDataSource(SongActivity.songListSA[SongActivity.songIndex].path)
             SongActivity.musicService!!.mediaPlayer!!.prepare()
             SongActivity.binding.pauseSong.setIconResource(R.drawable.pause)
-            SongActivity.musicService!!.showNotification(R.drawable.noti_pause)
+            SongActivity.musicService!!.showNotification(R.drawable.noti_pause, 0f)
             SongActivity.binding.seekbar.progress = 0
             SongActivity.binding.seekbar.max = mediaPlayer!!.duration
             SongActivity.binding.songTotalLength.text = SongActivity.songListSA[SongActivity.songIndex].formattedDuration
@@ -119,7 +134,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             //Pause music
             SongActivity.binding.pauseSong.setIconResource(R.drawable.play)
             NowPlayingFragment.binding.playPauseBtn.setImageResource(R.drawable.play)
-            showNotification(R.drawable.noti_play)
+            showNotification(R.drawable.noti_play, 0f)
             NowPlayingFragment.binding.playPauseBtn.setImageResource(R.drawable.play)
             SongActivity.musicService!!.mediaPlayer!!.pause()
             SongActivity.isPlaying = false
@@ -129,7 +144,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             //play music
             SongActivity.binding.pauseSong.setIconResource(R.drawable.pause)
             NowPlayingFragment.binding.playPauseBtn.setImageResource(R.drawable.pause)
-            showNotification(R.drawable.noti_pause)
+            showNotification(R.drawable.noti_pause, 1f)
             NowPlayingFragment.binding.playPauseBtn.setImageResource(R.drawable.pause)
             SongActivity.musicService!!.mediaPlayer!!.start()
             SongActivity.isPlaying = true

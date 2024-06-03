@@ -49,7 +49,7 @@ class NowPlayingFragment : Fragment() {
             binding.songNameF.text = SongActivity.songListSA[SongActivity.songIndex].title
             binding.songNameF.setSelected(true)
 
-            SongActivity.musicService!!.showNotification(R.drawable.noti_pause)
+            SongActivity.musicService!!.showNotification(R.drawable.noti_pause, 0f)
 
             playSong()
         }
@@ -90,7 +90,7 @@ class NowPlayingFragment : Fragment() {
     private fun playSong(){
         SongActivity.musicService!!.mediaPlayer!!.start()
         binding.playPauseBtn.setImageResource(R.drawable.pause)
-        SongActivity.musicService!!.showNotification(R.drawable.noti_pause)
+        SongActivity.musicService!!.showNotification(R.drawable.noti_pause, 1f)
         SongActivity.binding.pauseSong.setIconResource(R.drawable.pause)
         SongActivity.isPlaying = true
     }
@@ -98,7 +98,7 @@ class NowPlayingFragment : Fragment() {
     private fun pauseSong(){
         SongActivity.musicService!!.mediaPlayer!!.pause()
         binding.playPauseBtn.setImageResource(R.drawable.play)
-        SongActivity.musicService!!.showNotification(R.drawable.noti_play)
+        SongActivity.musicService!!.showNotification(R.drawable.noti_play, 0f)
         SongActivity.binding.pauseSong.setIconResource(R.drawable.play)
         SongActivity.isPlaying = false
     }

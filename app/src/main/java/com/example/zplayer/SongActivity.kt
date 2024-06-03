@@ -235,7 +235,7 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
                 musicService!!.mediaPlayer!!.start()
                 isPlaying = true
                 binding.pauseSong.setIconResource(R.drawable.pause)
-                musicService!!.showNotification(R.drawable.noti_pause)
+                musicService!!.showNotification(R.drawable.noti_pause, 1f)
             }
             binding.songTotalLength.text = songListSA[songIndex].formattedDuration
             binding.songStartLength.text = formatSongDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
@@ -342,14 +342,14 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         isPlaying = false
         musicService!!.mediaPlayer!!.pause()
         binding.pauseSong.setIconResource(R.drawable.play)
-        musicService!!.showNotification(R.drawable.noti_play)
+        musicService!!.showNotification(R.drawable.noti_play, 0f)
     }
 
     private fun playMusic() {
         isPlaying = true
         musicService!!.mediaPlayer!!.start()
         binding.pauseSong.setIconResource(R.drawable.pause)
-        musicService!!.showNotification(R.drawable.noti_pause)
+        musicService!!.showNotification(R.drawable.noti_pause, 1f)
     }
 
     private fun preNextSong(increment: Boolean) {
