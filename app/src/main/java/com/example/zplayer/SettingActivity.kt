@@ -52,6 +52,27 @@ class SettingActivity : AppCompatActivity() {
         binding.blackTheme.setOnClickListener {
             saveTheme(4)
         }
+
+        binding.sortBtn.setOnClickListener {
+            val sortMenuList = arrayOf("Date Added", "Title", "Size")
+            var currentSort = HomeActivity.sortOrder
+            val builder = MaterialAlertDialogBuilder(this)
+            builder.setTitle("Sort Songs" )
+                //first _ show dialog and 2nd _ show result
+                .setPositiveButton("OK"){ _, _ ->
+                    //for storing sorting order using shared preferences
+                    val editor = getSharedPreferences("SORTING", MODE_PRIVATE).edit()
+                    editor.putInt("sortOrder", currentSort)
+                    editor.apply()
+                }
+                .setSingleChoiceItems(sortMenuList, currentSort){ _, which ->
+                    currentSort = which
+                }
+
+            val exitDialog = builder.create()
+            exitDialog.show()
+            exitDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+        }
     }
 
     private fun saveTheme(index:Int){

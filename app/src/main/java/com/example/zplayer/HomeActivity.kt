@@ -50,6 +50,8 @@ class HomeActivity : AppCompatActivity() {
         var themeIndex: Int = 0
         val currentTheme = arrayOf(R.style.coolPink, R.style.coolBlue, R.style.coolGreen, R.style.purple, R.style.black)
         val currentThemeNav = arrayOf(R.style.coolPinkNav, R.style.coolBlueNav, R.style.coolGreenNav, R.style.purpleNav, R.style.blackNav)
+        var sortOrder: Int = 0
+        val sortingList = arrayOf(MediaStore.Audio.Media.DATE_ADDED + " DESC", MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.SIZE + " DESC")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -169,6 +171,9 @@ class HomeActivity : AppCompatActivity() {
     // After reading storage store songs to list
     private fun initializeSongList() {
         if (hasReadMediaAudioPermission() || hasReadExternalStoragePermission()) {
+            //for retrieving sorting order
+            val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
+            sortOrder = sortEditor.getInt("sortOrder", 0)
             songListMA = getAllSongs()
             setupRecyclerView()
         }
@@ -224,7 +229,8 @@ class HomeActivity : AppCompatActivity() {
             projection,
             selection,
             null,
-            MediaStore.Audio.Media.DATE_ADDED + " DESC"
+            sortingList[sortOrder],
+            null
         )
         if (cursor != null) {
             if (cursor.moveToFirst()) {
@@ -285,6 +291,15 @@ class HomeActivity : AppCompatActivity() {
         val playlistJsonString = GsonBuilder().create().toJson(PlaylistActivity.musicPlaylist)
         editor.putString("Playlist", playlistJsonString)
         editor.apply()
+
+        //for retrieving sorting order
+        val sortEditor = getSharedPreferences("SORTING", MODE_PRIVATE)
+        val sortValue = sortEditor.getInt("sortOrder", 0)
+        if (sortOrder != sortValue){
+            sortOrder = sortValue
+            songListMA = getAllSongs()
+            songAdapter.updateMusicList(songListMA)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
