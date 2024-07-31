@@ -84,7 +84,7 @@ fun favChecker(id: String): Int {
     return -1
 }
 
-// checks if song from internal storage exists or not if not remove it
+// checks if song from external storage exists or not if not remove it
 fun checkPlaylist(playlist: MutableList<SongsLists>): MutableList<SongsLists>{
     playlist.forEachIndexed { index, music ->
         val file = File(music.path)

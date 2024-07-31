@@ -82,7 +82,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
             .build()
 
         //for moving notification seekbar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
             mediaSession.setMetadata(MediaMetadataCompat.Builder()
                 .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, mediaPlayer!!.duration.toLong())
                 .build())
@@ -90,7 +90,7 @@ class MusicService : Service(), AudioManager.OnAudioFocusChangeListener {
                 .setState(PlaybackStateCompat.STATE_PLAYING, mediaPlayer!!.currentPosition.toLong(), playbackSpeed)
                 .setActions(PlaybackStateCompat.ACTION_SEEK_TO)
                 .build())
-        }
+        }*/
 
         startForeground(19, notification)
 

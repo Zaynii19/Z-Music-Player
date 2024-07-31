@@ -62,8 +62,6 @@ class NowPlayingFragment : Fragment() {
             ContextCompat.startActivity(requireContext(), intent, null)
         }
 
-
-
         return view
     }
 

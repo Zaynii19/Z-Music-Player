@@ -9,28 +9,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.zplayer.databinding.ActivityFavBinding
 
 class FavActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityFavBinding.inflate(layoutInflater)
     }
-    companion object{
-        var songListFA : MutableList<SongsLists> = mutableListOf()
+    companion object {
+        var songListFA: MutableList<SongsLists> = mutableListOf()
         @SuppressLint("StaticFieldLeak")
-        lateinit var favSongAdapter : FavRcvAdapter
+        var favSongAdapter: FavRcvAdapter? = null
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //Setting Theme
+        // Setting Theme
         setTheme(HomeActivity.currentTheme[HomeActivity.themeIndex])
 
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        //update song lists
+        // Update song lists
         songListFA = checkPlaylist(songListFA)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -40,21 +40,24 @@ class FavActivity : AppCompatActivity() {
         }
 
         binding.back.setOnClickListener {
-            //startActivity(Intent(this, HomeActivity::class.java))
+            // Start activity Intent(this, HomeActivity::class.java)
             finish()
         }
 
         binding.rcv.setHasFixedSize(true)
         binding.rcv.setItemViewCacheSize(13)
         binding.rcv.layoutManager = GridLayoutManager(this, 4)
+
+        // Initialize favSongAdapter here
         favSongAdapter = FavRcvAdapter(this, songListFA)
         binding.rcv.adapter = favSongAdapter
 
-        if (songListFA.size < 2)
+        if (songListFA.size < 2) {
             binding.shuffleBtn.visibility = View.INVISIBLE
+        }
 
         binding.shuffleBtn.setOnClickListener {
-            intent = Intent(this, SongActivity::class.java)
+            val intent = Intent(this, SongActivity::class.java)
             intent.putExtra("index", 0)
             intent.putExtra("class", "FavShuffle")
             startActivity(intent)

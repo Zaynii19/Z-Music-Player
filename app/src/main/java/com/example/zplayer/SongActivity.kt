@@ -22,7 +22,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
@@ -34,7 +33,6 @@ import kotlin.system.exitProcess
 
 @Suppress("DEPRECATION")
 class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompletionListener {
-    private lateinit var favSongAdapter: FavRcvAdapter
     companion object {
         lateinit var songListSA: MutableList<SongsLists>
         var songIndex: Int = 0
@@ -165,20 +163,32 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         }
 
         binding.favBtn.setOnClickListener {
-            if (isFav) {
-                binding.favBtn.setImageResource(R.drawable.empty_fav)
-                isFav = false
-                FavActivity.songListFA.removeAt(fSongIndex)
-                FavActivity.favSongAdapter.updateMusicList(FavActivity.songListFA)
-
-            } else {
-                binding.favBtn.setImageResource(R.drawable.fav)
-                isFav = true
-                FavActivity.songListFA.add(songListSA[songIndex])
+            if (FavActivity.favSongAdapter != null){
+                val favSongAdapter = FavActivity.favSongAdapter!!
+                if (isFav) {
+                    binding.favBtn.setImageResource(R.drawable.empty_fav)
+                    isFav = false
+                    // Use the song object to find its index and remove it
+                    val songToRemove = songListSA[songIndex]
+                    val indexToRemove = FavActivity.songListFA.indexOf(songToRemove)
+                    if (indexToRemove != -1) {
+                        FavActivity.songListFA.removeAt(indexToRemove)
+                        favSongAdapter.updateMusicList(FavActivity.songListFA)
+                    }
+                } else {
+                    binding.favBtn.setImageResource(R.drawable.fav)
+                    isFav = true
+                    FavActivity.songListFA.add(songListSA[songIndex])
+                    favSongAdapter.updateMusicList(FavActivity.songListFA) // Update adapter
+                }
+            }else{
+                Toast.makeText(this, "Favorite songs not loaded yet", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
+    //for song played from external storage
     private fun getMusicDetails(contentUri: Uri): SongsLists {
         var cursor: Cursor? = null
         try {
@@ -278,8 +288,8 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
                 } else {
                     songListSA.addAll(HomeActivity.songListMA)
                 }
+                setLayout()
                 updateUI()
-                return
             }
 
             "SongRcvAdapterSearch" -> {
@@ -309,6 +319,8 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
         } else {
             binding.pauseSong.setIconResource(R.drawable.play)
         }
+
+        binding.seekbar.progress = musicService?.mediaPlayer?.currentPosition ?: 0
 
         if (repeat) {
             binding.repeatBtn.setColorFilter(ContextCompat.getColor(this, R.color.purple_588))
