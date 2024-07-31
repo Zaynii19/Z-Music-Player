@@ -17,7 +17,7 @@ Installation
 Clone the repository:
 bash
 Copy code
-git clone https://github.com/yourusername/music-player-app.git
+git clone https://github.com/zaynii19/music-player-app.git
 Open the project in Android Studio.
 Build and run the app on your Android device or emulator.
 Usage
