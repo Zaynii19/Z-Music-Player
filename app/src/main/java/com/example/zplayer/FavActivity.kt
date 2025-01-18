@@ -15,11 +15,11 @@ class FavActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityFavBinding.inflate(layoutInflater)
     }
-    companion object {
+/*    companion object {
         var songListFA: MutableList<SongsLists> = mutableListOf()
         @SuppressLint("StaticFieldLeak")
         var favSongAdapter: FavRcvAdapter? = null
-    }
+    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +30,13 @@ class FavActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
+        // Initialize the adapter if not already initialized
+        if (FavoriteManager.favSongAdapter == null) {
+            FavoriteManager.favSongAdapter = FavRcvAdapter(this, FavoriteManager.songListFA)
+        }
+
         // Update song lists
-        songListFA = checkPlaylist(songListFA)
+        FavoriteManager.songListFA = checkPlaylist(FavoriteManager.songListFA)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -49,10 +54,10 @@ class FavActivity : AppCompatActivity() {
         binding.rcv.layoutManager = GridLayoutManager(this, 4)
 
         // Initialize favSongAdapter here
-        favSongAdapter = FavRcvAdapter(this, songListFA)
-        binding.rcv.adapter = favSongAdapter
+        FavoriteManager.favSongAdapter = FavRcvAdapter(this, FavoriteManager.songListFA)
+        binding.rcv.adapter = FavoriteManager.favSongAdapter
 
-        if (songListFA.size < 2) {
+        if (FavoriteManager.songListFA.size < 2) {
             binding.shuffleBtn.visibility = View.INVISIBLE
         }
 

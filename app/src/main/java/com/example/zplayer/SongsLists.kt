@@ -72,7 +72,7 @@ fun terminateApp(){
 }
 
 fun favChecker(id: String): Int {
-    FavActivity.songListFA.forEachIndexed { index, song ->
+    FavoriteManager.songListFA.forEachIndexed { index, song ->
         SongActivity.isFav = false
         //checks on click fav button the current song is already present in fav songs
         if (id == song.id){
@@ -85,12 +85,20 @@ fun favChecker(id: String): Int {
 }
 
 // checks if song from external storage exists or not if not remove it
-fun checkPlaylist(playlist: MutableList<SongsLists>): MutableList<SongsLists>{
-    playlist.forEachIndexed { index, music ->
+fun checkPlaylist(playlist: MutableList<SongsLists>): MutableList<SongsLists> {
+    val iterator = playlist.iterator()
+    while (iterator.hasNext()) {
+        val music = iterator.next()
         val file = File(music.path)
-        if (!file.exists())
-            playlist.removeAt(index)
+        if (!file.exists()) {
+            iterator.remove() // Safely remove the item using the iterator
+        }
     }
-    
     return playlist
+}
+
+//Initializer
+object FavoriteManager {
+    var songListFA: MutableList<SongsLists> = mutableListOf()
+    var favSongAdapter: FavRcvAdapter? = null
 }

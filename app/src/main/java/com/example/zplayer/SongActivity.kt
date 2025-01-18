@@ -162,7 +162,7 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
             startActivity(Intent.createChooser(shareIntent, "Share Music File"))
         }
 
-        binding.favBtn.setOnClickListener {
+        /*binding.favBtn.setOnClickListener {
             if (FavActivity.favSongAdapter != null){
                 val favSongAdapter = FavActivity.favSongAdapter!!
                 if (isFav) {
@@ -185,7 +185,33 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
                 Toast.makeText(this, "Favorite songs not loaded yet", Toast.LENGTH_SHORT).show()
             }
 
+        }*/
+
+        binding.favBtn.setOnClickListener {
+            if (FavoriteManager.favSongAdapter == null) {
+                // Initialize the adapter if it wasn't initialized
+                FavoriteManager.favSongAdapter = FavRcvAdapter(this, FavoriteManager.songListFA)
+            }
+
+            val favSongAdapter = FavoriteManager.favSongAdapter!!
+            if (isFav) {
+                binding.favBtn.setImageResource(R.drawable.empty_fav)
+                isFav = false
+                // Use the song object to find its index and remove it
+                val songToRemove = songListSA[songIndex]
+                val indexToRemove = FavoriteManager.songListFA.indexOf(songToRemove)
+                if (indexToRemove != -1) {
+                    FavoriteManager.songListFA.removeAt(indexToRemove)
+                    favSongAdapter.updateMusicList(FavoriteManager.songListFA)
+                }
+            } else {
+                binding.favBtn.setImageResource(R.drawable.fav)
+                isFav = true
+                FavoriteManager.songListFA.add(songListSA[songIndex])
+                favSongAdapter.updateMusicList(FavoriteManager.songListFA) // Update adapter
+            }
         }
+
     }
 
     //for song played from external storage
@@ -274,12 +300,12 @@ class SongActivity : AppCompatActivity(), ServiceConnection, MediaPlayer.OnCompl
             }
 
             "FavShuffle" -> {
-                songListSA.addAll(FavActivity.songListFA)
+                songListSA.addAll(FavoriteManager.songListFA)
                 songListSA.shuffle()
             }
 
             "FavAdapter" -> {
-                songListSA.addAll(FavActivity.songListFA)
+                songListSA.addAll(FavoriteManager.songListFA)
             }
 
             "NowPlaying" -> {
